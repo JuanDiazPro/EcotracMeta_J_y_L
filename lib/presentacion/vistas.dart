@@ -35,9 +35,8 @@ class _FormularioRegistroState extends State<FormularioRegistro> {
     final ok = await widget.alGuardar(_laboratorio, _litros.text);
     if (!ok || !mounted) return;
     _litros.clear();
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Consumo guardado')),
-    );
+    ScaffoldMessenger.of(context)
+        .showSnackBar(const SnackBar(content: Text('Consumo guardado')));
   }
 
   @override
@@ -104,18 +103,18 @@ class ListaHistorial extends StatelessWidget {
 class PanelMeta extends StatelessWidget {
   const PanelMeta({
     super.key,
-    required this.total,
+    required this.usado,
     required this.meta,
     required this.avance,
-    required this.metaSuperada,
+    required this.superada,
     required this.alSubir,
     required this.alBajar,
   });
 
-  final double total;
+  final double usado;
   final double meta;
   final double avance;
-  final bool metaSuperada;
+  final bool superada;
   final VoidCallback alSubir;
   final VoidCallback alBajar;
 
@@ -126,11 +125,11 @@ class PanelMeta extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text('Usado: $total de $meta L'),
+          Text('Usado: $usado de $meta L'),
           const SizedBox(height: 8),
           LinearProgressIndicator(value: avance),
           const SizedBox(height: 8),
-          Text(metaSuperada ? 'Te pasaste de la meta' : 'Dentro de la meta'),
+          Text(superada ? 'Te pasaste de la meta' : 'Dentro de la meta'),
           const SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -156,11 +155,13 @@ class PanelMeta extends StatelessWidget {
 class PantallasEcoTrack extends StatefulWidget {
   const PantallasEcoTrack({
     super.key,
+    required this.titulo,
     required this.registro,
     required this.historial,
     required this.meta,
   });
 
+  final String titulo;
   final Widget registro;
   final Widget historial;
   final Widget meta;
@@ -176,7 +177,7 @@ class _PantallasEcoTrackState extends State<PantallasEcoTrack> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('EcoTrack')),
+      appBar: AppBar(title: Text(widget.titulo)),
       // IndexedStack mantiene montadas las tres pestañas y solo enseña una.
       body: IndexedStack(
         index: _pestana,

@@ -37,6 +37,7 @@ class _AppChangeNotifierState extends State<AppChangeNotifier> {
     return MaterialApp(
       title: 'EcoTrack',
       home: PantallasEcoTrack(
+        titulo: 'A · ChangeNotifier',
         registro: RegistroCN(vm: _vm),
         historial: HistorialCN(vm: _vm),
         meta: MetaCN(vm: _vm),
@@ -88,10 +89,10 @@ class MetaCN extends StatelessWidget {
     return ListenableBuilder(
       listenable: vm,
       builder: (context, _) => PanelMeta(
-        total: vm.total,
+        usado: vm.total,
         meta: vm.meta,
         avance: vm.avance,
-        metaSuperada: vm.metaSuperada,
+        superada: vm.metaSuperada,
         alSubir: vm.subirMeta,
         alBajar: vm.bajarMeta,
       ),

@@ -21,6 +21,7 @@ class AppProvider extends StatelessWidget {
       child: const MaterialApp(
         title: 'EcoTrack',
         home: PantallasEcoTrack(
+          titulo: 'B · provider',
           registro: RegistroProvider(),
           historial: HistorialProvider(),
           meta: MetaProvider(),
@@ -62,10 +63,10 @@ class MetaProvider extends StatelessWidget {
   Widget build(BuildContext context) {
     final vm = context.watch<ConsumosViewModel>();
     return PanelMeta(
-      total: vm.total,
+      usado: vm.total,
       meta: vm.meta,
       avance: vm.avance,
-      metaSuperada: vm.metaSuperada,
+      superada: vm.metaSuperada,
       alSubir: () => context.read<ConsumosViewModel>().subirMeta(),
       alBajar: () => context.read<ConsumosViewModel>().bajarMeta(),
     );

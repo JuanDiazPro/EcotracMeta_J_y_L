@@ -1,0 +1,100 @@
+import 'package:flutter/material.dart';
+
+import '../datos/consumo_repository.dart';
+import '../presentacion/consumos_view_model.dart';
+import '../presentacion/vistas.dart';
+
+// Variante A: ChangeNotifier puro, el ViewModel viaja por constructor.
+
+class AppChangeNotifier extends StatefulWidget {
+  const AppChangeNotifier({super.key, required this.repositorio});
+
+  final ConsumoRepository repositorio;
+
+  @override
+  State<AppChangeNotifier> createState() => _AppChangeNotifierState();
+}
+
+class _AppChangeNotifierState extends State<AppChangeNotifier> {
+  // Se crea una sola vez, no en cada build.
+  late final ConsumosViewModel _vm = ConsumosViewModel(widget.repositorio);
+
+  @override
+  void initState() {
+    super.initState();
+    _vm.cargar();
+  }
+
+  @override
+  void dispose() {
+    // Quien crea el ViewModel es quien lo libera.
+    _vm.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'EcoTrack',
+      home: PantallasEcoTrack(
+        registro: RegistroCN(vm: _vm),
+        historial: HistorialCN(vm: _vm),
+        meta: MetaCN(vm: _vm),
+      ),
+    );
+  }
+}
+
+class RegistroCN extends StatelessWidget {
+  const RegistroCN({super.key, required this.vm});
+
+  final ConsumosViewModel vm;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListenableBuilder(
+      listenable: vm,
+      builder: (context, _) => FormularioRegistro(
+        error: vm.error,
+        guardando: vm.guardando,
+        alGuardar: vm.guardar,
+      ),
+    );
+  }
+}
+
+class HistorialCN extends StatelessWidget {
+  const HistorialCN({super.key, required this.vm});
+
+  final ConsumosViewModel vm;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListenableBuilder(
+      listenable: vm,
+      builder: (context, _) =>
+          ListaHistorial(consumos: vm.consumos, total: vm.total),
+    );
+  }
+}
+
+class MetaCN extends StatelessWidget {
+  const MetaCN({super.key, required this.vm});
+
+  final ConsumosViewModel vm;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListenableBuilder(
+      listenable: vm,
+      builder: (context, _) => PanelMeta(
+        total: vm.total,
+        meta: vm.meta,
+        avance: vm.avance,
+        metaSuperada: vm.metaSuperada,
+        alSubir: vm.subirMeta,
+        alBajar: vm.bajarMeta,
+      ),
+    );
+  }
+}

@@ -8,6 +8,6 @@ double ajustarMeta(double actual, double cambio) {
 }
 
 double avanceDeMeta({required double total, required double meta}) {
-  if (meta <= 0) return 0; 
+  if (meta <= 0) return 0;
   return (total / meta).clamp(0, 1).toDouble();
 }
